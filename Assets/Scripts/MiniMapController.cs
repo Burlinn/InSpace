@@ -39,35 +39,54 @@ public class MiniMapController : MonoBehaviour {
         float xDistance;
         float yDistance;
         float zDistance;
-        string yDirection;
+        float xyDistance;
+        float mapRadius;
+        GameObject playerMarker = transform.Find("PlayerMarker").gameObject;
         Image enemyImage;
         foreach (GameObject enemy in _enemies)
         {
             xDistance = _player.transform.position.x - enemy.transform.position.x;
             yDistance = _player.transform.position.y - enemy.transform.position.y;
             zDistance = _player.transform.position.z - enemy.transform.position.z;
-            if(Math.Abs(yDistance) < 2)
-            {
-                enemyImage = Instantiate(
-                    _enemyDotPrefab,
-                    transform.position,
-                    transform.rotation);
+            xyDistance = Vector2.Distance(new Vector2(_player.transform.position.x, _player.transform.position.z), new Vector2(enemy.transform.position.x, enemy.transform.position.z));
+
+            if(Math.Abs(xyDistance) < 100) { 
+                if (Math.Abs(yDistance) < 2)
+                {
+                    enemyImage = Instantiate(
+                        _enemyDotPrefab,
+                        transform.position,
+                        transform.rotation);
+                }
+                else if (_player.transform.position.y > enemy.transform.position.y)
+                {
+                    enemyImage = Instantiate(
+                      _enemyDownPrefab,
+                      transform.position,
+                      transform.rotation);
+                }
+                else
+                {
+                    enemyImage = Instantiate(
+                      _enemyUpPrefab,
+                      new Vector3(transform.position.x + xDistance, transform.position.y, transform.position.z + zDistance),
+                      transform.rotation);
+                }
+                enemyImage.transform.SetParent(gameObject.transform);
+                enemyImage.transform.position = playerMarker.transform.position;
+                mapRadius = ((RectTransform)playerMarker.transform).rect.height - 25;
+
+                var relativePosition = enemy.transform.InverseTransformDirection(_player.transform.forward);
+
+                enemyImage.transform.position = new Vector3((int)(playerMarker.transform.position.x + (relativePosition.x * xyDistance)), (int)(playerMarker.transform.position.y + (relativePosition.z * - xyDistance)));
+
             }
-            else if (_player.transform.position.y > enemy.transform.position.y)
-            {
-                enemyImage = Instantiate(
-                  _enemyDownPrefab,
-                  transform.position,
-                  transform.rotation);
-            }
-            else
-            {
-                enemyImage = Instantiate(
-                  _enemyUpPrefab,
-                  transform.position,
-                  transform.rotation);
-            }
-            enemyImage.transform.SetParent(gameObject.transform);
+
         }
+    }
+
+    private double RadianToDegree(double angle)
+    {
+        return angle * (180.0 / Math.PI);
     }
 }

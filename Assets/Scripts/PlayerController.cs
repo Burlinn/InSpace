@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour {
         {
             StopCoroutine("SetTravelLine");
             StartCoroutine("SetTravelLine");
+            _isDrifting = false;
         }
         if (Input.GetMouseButton(1))
         {
@@ -121,21 +122,22 @@ public class PlayerController : MonoBehaviour {
             mousePositionY = (mousePositionY * -1f) - .5f;
         }
 
-        rotation = new Vector3(mousePositionX * _rotationSpeed, mousePositionY * _rotationSpeed, 0);
+        rotation = new Vector3( -1 * mousePositionY * _rotationSpeed, mousePositionX * _rotationSpeed, 0);
         transform.Rotate(rotation * Time.deltaTime);
     }
 
     void SetDriftLane()
     {
         _isDrifting = true;
-        if(Vector3.Distance(transform.position, _line.bounds.min) > Vector3.Distance(transform.position, _line.bounds.max)){
-            _driftTo = _line.bounds.min;
-        }
-        else
-        {
-            _driftTo = _line.bounds.max;
-        }
-        
+        _driftTo = _line.bounds.center;
+        //if(Vector3.Distance(transform.position, _line.bounds.min) > Vector3.Distance(transform.position, _line.bounds.max)){
+        //    _driftTo = _line.bounds.min;
+        //}
+        //else
+        //{
+        //    _driftTo = _line.bounds.max;
+        //}
+
     }
 
     void Drift()
