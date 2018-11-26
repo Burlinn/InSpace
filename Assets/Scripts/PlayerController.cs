@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour {
         {
             _line.GetComponent<Renderer>().material.mainTextureOffset = new Vector2(0, Time.time);
             //Ray ray = new Ray(new Vector3(transform.position.x - .42f, transform.position.y, transform.position.z + .1f), transform.forward);
-            Ray ray = new Ray(new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.forward);
+            Ray ray = new Ray(new Vector3(_shipTravelLine.transform.position.x, _shipTravelLine.transform.position.y, _shipTravelLine.transform.position.z), _shipTravelLine.transform.forward);
             RaycastHit hit;
 
             _line.SetPosition(0, ray.origin);

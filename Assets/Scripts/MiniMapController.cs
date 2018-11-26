@@ -41,6 +41,7 @@ public class MiniMapController : MonoBehaviour {
         float zDistance;
         float xyDistance;
         float mapRadius;
+        float totalDistance;
         GameObject playerMarker = transform.Find("PlayerMarker").gameObject;
         Image enemyImage;
         foreach (GameObject enemy in _enemies)
@@ -49,8 +50,8 @@ public class MiniMapController : MonoBehaviour {
             yDistance = _player.transform.position.y - enemy.transform.position.y;
             zDistance = _player.transform.position.z - enemy.transform.position.z;
             xyDistance = Vector2.Distance(new Vector2(_player.transform.position.x, _player.transform.position.z), new Vector2(enemy.transform.position.x, enemy.transform.position.z));
-
-            if(Math.Abs(xyDistance) < 100) { 
+            totalDistance = Vector3.Distance(_player.transform.position, enemy.transform.position);
+            if (Math.Abs(totalDistance) < 100) { 
                 if (Math.Abs(yDistance) < 2)
                 {
                     enemyImage = Instantiate(

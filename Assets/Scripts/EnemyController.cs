@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +24,8 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if(_player != null) { 
+        if(_player != null) {
+            CheckForDistance();
             RotateTowardsPlayer();
             MoveForward();
             if (Time.time > resetTimer)
@@ -42,6 +44,15 @@ public class EnemyController : MonoBehaviour {
             transform.rotation);
         Destroy(this.gameObject);
         Destroy(collision.gameObject);
+    }
+
+    void CheckForDistance()
+    {
+        float distance = Vector3.Distance(_player.transform.position, transform.position);
+        if (Math.Abs(distance) > 100)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     void RotateTowardsPlayer()
