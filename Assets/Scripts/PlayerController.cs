@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour {
     private bool _isDrifting = false;
     private Vector3 _driftTo = new Vector3();
     private float _resetTimer;
-    private int _shotsFired = 0;
 
     // Use this for initialization
     void Start () {
@@ -27,7 +26,6 @@ public class PlayerController : MonoBehaviour {
         _shipTravelLine = gameObject.transform.Find("ShipTravelLine").gameObject;
         _line = _shipTravelLine.GetComponent<LineRenderer>();
         _line.enabled = false;
-        gameObject.GetComponent<Light>().enabled = false;
     }
 
     // Update is called once per frame
@@ -68,17 +66,15 @@ public class PlayerController : MonoBehaviour {
     {
         var trans = transform;
         _line.enabled = true;
-        _shipTravelLine.GetComponent<Light>().enabled = true;
         while (Input.GetKey("space"))
         {
             _line.GetComponent<Renderer>().material.mainTextureOffset = new Vector2(0, Time.time);
-            //Ray ray = new Ray(new Vector3(transform.position.x - .42f, transform.position.y, transform.position.z + .1f), transform.forward);
             Ray ray = new Ray(new Vector3(_shipTravelLine.transform.position.x, _shipTravelLine.transform.position.y, _shipTravelLine.transform.position.z), _shipTravelLine.transform.forward);
             RaycastHit hit;
 
             _line.SetPosition(0, ray.origin);
 
-            if (Physics.Raycast(ray, out hit, 100))
+            if (Physics.Raycast(ray, out hit, 1000))
             {
                 _line.SetPosition(1, hit.point);
                 if (hit.rigidbody)
@@ -88,13 +84,12 @@ public class PlayerController : MonoBehaviour {
             }
             else
             {
-                _line.SetPosition(1, ray.GetPoint(100));
+                _line.SetPosition(1, ray.GetPoint(1000));
             }
 
 
             yield return null;
         }
-        _shipTravelLine.GetComponent<Light>().enabled = false;
         _line.enabled = false;
     }
 
@@ -130,13 +125,7 @@ public class PlayerController : MonoBehaviour {
     {
         _isDrifting = true;
         _driftTo = _line.bounds.center;
-        //if(Vector3.Distance(transform.position, _line.bounds.min) > Vector3.Distance(transform.position, _line.bounds.max)){
-        //    _driftTo = _line.bounds.min;
-        //}
-        //else
-        //{
-        //    _driftTo = _line.bounds.max;
-        //}
+
 
     }
 
@@ -169,4 +158,5 @@ public class PlayerController : MonoBehaviour {
         Destroy(collision.gameObject);
         Destroy(this.gameObject);
     }
+
 }

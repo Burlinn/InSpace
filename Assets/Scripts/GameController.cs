@@ -7,6 +7,9 @@ public class GameController : MonoBehaviour {
     public GameObject _player;
     public float _spawnTime;
     public float _spawnCooldown;
+    public GameObject _endGameCamera;
+
+    private Vector3 _playerPosition;
 
     void Start()
     {
@@ -19,6 +22,16 @@ public class GameController : MonoBehaviour {
         {
             _spawnTime = Time.time + _spawnCooldown;
             SpawnEnemy();
+        }
+        if (_player == null && _endGameCamera.activeInHierarchy == false)
+        {
+            _endGameCamera.SetActive(true);
+            _endGameCamera.transform.position = new Vector3(_playerPosition.x + 6, _playerPosition.y + 30, _playerPosition.z);
+            _endGameCamera.transform.Rotate(90, 0, 0);
+        }
+        else if (_player != null)
+        {
+            _playerPosition = _player.transform.position;
         }
     }
 
