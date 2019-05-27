@@ -18,6 +18,10 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (Time.time > _spawnTime && _player != null)
         {
             _spawnTime = Time.time + _spawnCooldown;
